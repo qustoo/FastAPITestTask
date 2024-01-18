@@ -2,7 +2,7 @@ import xlsxwriter
 
 
 class DataWriter:
-    def __init__(self, columns: list[str], filename: str = "data.xlsx") -> None:
+    def __init__(self, columns: list[str], filename: str) -> None:
         self.book = xlsxwriter.Workbook(filename)
         self.columns = columns
 
@@ -23,4 +23,4 @@ class DataWriter:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.book.close()
-        return False # Ловим все ошибки
+        return False  # Ловим все ошибки
