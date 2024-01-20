@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:7
+    container_name: test_task_redis
+  app:
+    build:
+      context: .
+    container_name: test_task
+    depends_on:
+      redis:
+        condition: service_started
