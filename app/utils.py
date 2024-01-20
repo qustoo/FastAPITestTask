@@ -1,9 +1,9 @@
-import xlsxwriter
+from xlsxwriter import Workbook
 
 
 class DataWriter:
     def __init__(self, columns: list[str], filename: str) -> None:
-        self.book = xlsxwriter.Workbook(filename)
+        self.book = Workbook(filename)
         self.columns = columns
 
     def write_columns(self):
@@ -14,7 +14,12 @@ class DataWriter:
         col_number = 1
         for item in data[:limit]:
             for value, index in zip(item.values(), range(len(self.columns))):
-                self.sheet.write(col_number, index, str(value))
+                if isinstance(value,dict):
+                    for _value,_index in zip(value.values(),range(len(value.keys()))):
+                        print(index,_index)
+                        self.sheet.write(_index+1,index,str(_value))
+                else:
+                    self.sheet.write(col_number, index, str(value))
             col_number += 1
 
     def __enter__(self):
