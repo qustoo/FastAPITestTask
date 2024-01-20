@@ -4,7 +4,7 @@ from exceptions import FileNotFoundException
 from exceptions import ValidateBsonID
 from dao.grid_fs_mongo_dao import MongoImagesDAO
 from schemas.images import ImageModel
-from dao import get_mongo_database
+from database import get_mongo_database
 from fastapi.responses import StreamingResponse
 from database import fs
 

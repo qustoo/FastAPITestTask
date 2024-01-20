@@ -1,6 +1,7 @@
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from config import settings
+from dao import MongoImagesDAO
 
 if settings.DB_TYPE == "LOCAL":
     DATABASE_URL = settings.LOCAL_DATABASE_URL
@@ -16,3 +17,7 @@ image_collection = db.get_collection("Images")
 image_information_collect = db.get_collection("fs.files")
 fs = AsyncIOMotorGridFSBucket(db)
 fs.get_io_loop = asyncio.get_event_loop
+
+
+async def get_mongo_database():
+    return MongoImagesDAO(collection, image_collection, image_information_collect, fs)

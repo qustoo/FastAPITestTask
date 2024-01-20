@@ -10,7 +10,7 @@ from schemas import (
     SortValues,
     UserOutputModel,
 )
-from dao import get_mongo_database
+from database import get_mongo_database
 from dao.grid_fs_mongo_dao import MongoImagesDAO
 import asyncio
 from exceptions import (

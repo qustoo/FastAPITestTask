@@ -37,3 +37,27 @@ class MongoDAO(NoSQLDAO):
                 }
             )
         ]
+    
+     # INC/DEC VOTE VALUE
+
+    async def check_vote_value(self, id):
+        vote_valud_dict: dict[str, str] = await self.object_collection.find_one(
+            {"_id": id}, {"vote_value": 1}
+        )
+        return vote_valud_dict.get("vote_value", 0)
+
+    async def vote_value(self, id, value):
+        vote_counter = await self.check_vote_value(id)
+        if (vote_counter <= 0 and value < 0) or (vote_counter >= 10 and value > 0):
+            return False
+        await self.object_collection.find_one_and_update(
+            {"_id": id}, {"$inc": {"vote_value": value}}
+        )
+        return True
+    
+    
+    # CLEAR COLLECTION
+    async def clear_database(self):
+        await self._image_coll.delete_many({})
+        await self._fs_files.delete_many({})
+        await self.object_collection.delete_many({})

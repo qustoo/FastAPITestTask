@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from utils import DataWriter
-from dao import get_mongo_database, MongoImagesDAO
+from dao import MongoImagesDAO
+from database import get_mongo_database
 
 router = APIRouter(prefix="/export", tags=["Exports"])
 
