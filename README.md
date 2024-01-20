@@ -22,7 +22,7 @@
 ## Запуск приложения
 - Получите копию репозитория
 ```
-https://github.com/qustoo/FastAPIHotelsEducation
+https://github.com/qustoo/FastAPITestTask
 ```
 - Заполните файл .env-non-dev переменными окружения, подмените его на .env
 ```
