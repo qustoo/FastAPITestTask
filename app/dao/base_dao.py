@@ -42,9 +42,10 @@ class NoSQLDAO(NoSQLInterface):
         return await self.object_collection.find({}).to_list(limit)
 
     async def update_user(self, id, updated_user):
-        return await self.object_collection.find_one_and_update(
+        await self.object_collection.find_one_and_update(
             {"_id": id}, {"$set": updated_user}
         )
+        return await self.show_user_by_id(id)
 
     async def delete_user(self, id):
         return await self.object_collection.delete_one({"_id": id})
