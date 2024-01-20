@@ -16,7 +16,6 @@ class DataWriter:
             for value, index in zip(item.values(), range(len(self.columns))):
                 if isinstance(value,dict):
                     for _value,_index in zip(value.values(),range(len(value.keys()))):
-                        print(index,_index)
                         self.sheet.write(_index+1,index,str(_value))
                 else:
                     self.sheet.write(col_number, index, str(value))
