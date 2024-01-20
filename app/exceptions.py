@@ -1,50 +1,41 @@
-from typing import Any, Dict, Optional
 from bson import ObjectId
 from bson.errors import InvalidId
 from fastapi.exceptions import HTTPException
+from fastapi import status
 
 
 class ItemNotFoundException(HTTPException):
-    def __init__(
-        self,
-        status_code: int = 404,
-        detail: Any = None,
-        headers: Dict[str, str] | None = None,
-    ) -> None:
-        super().__init__(status_code, detail, headers)
+    status_code = 404
+    detail = ""
 
-
-class FileNotFoundException(ItemNotFoundException):
-    def __init__(
-        self,
-        status_code: int = 404,
-        detail: Any = None,
-        headers: Dict[str, str] | None = None,
-    ) -> None:
-        detail = "Searching file not found"
-        super().__init__(status_code, detail, headers)
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
 
 
 class UserNotFoundException(ItemNotFoundException):
-    def __init__(
-        self,
-        status_code: int = 404,
-        detail: Any = None,
-        headers: Dict[str, str] | None = None,
-    ) -> None:
-        detail = "Searching user not found"
-        super().__init__(status_code, detail, headers)
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "User not found"
+
+
+class FileNotFoundException(ItemNotFoundException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "File not found"
 
 
 class InvalidBsonIDException(HTTPException):
-    def __init__(
-        self,
-        status_code: int = 422,
-        detail: Any = None,
-        headers: Dict[str, str] | None = None,
-    ) -> None:
-        detail = "Incorrect input id"
-        super().__init__(status_code, detail, headers)
+    status_code: int = 422
+    detail: str = "Incorrect input id"
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class IncorrectVoteValueException(HTTPException):
+    status_code: int = (404,)
+    detail: str = ("incorrect vote value(less then 0 or greaten then 10)",)
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
 
 
 def ValidateBsonID(id: str):
