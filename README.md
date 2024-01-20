@@ -68,7 +68,7 @@ make down
 ## Screenshots
 ### All users
 ![All hotels in Swagger](files_to_readme/all_users.jpg)
-### Filter users by name,username
+### Filter users by name,surname
 ![Login page](files_to_readme/filter_users.jpg)
 ### Details file information
 ![](files_to_readme/file_information.jpg)
