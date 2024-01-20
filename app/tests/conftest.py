@@ -1,6 +1,7 @@
-from httpx import AsyncClient
-import pytest
 import asyncio
+
+import pytest
+from httpx import AsyncClient
 from main import app as fastapi_app
 
 

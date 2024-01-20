@@ -1,6 +1,7 @@
-from httpx import AsyncClient
-import pytest
 import os
+
+import pytest
+from httpx import AsyncClient
 
 
 @pytest.mark.parametrize(

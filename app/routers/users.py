@@ -1,22 +1,23 @@
+import asyncio
 from typing import Optional
+
+from dao.grid_fs_mongo_dao import MongoImagesDAO
+from database import get_mongo_database
+from exceptions import (
+    IncorrectVoteValueException,
+    UserNotFoundException,
+    ValidateBsonID,
+)
 from fastapi import APIRouter, Body, Depends, File, Path, UploadFile, status
 from fastapi.responses import JSONResponse
 from schemas import (
-    UserModel,
-    UserCollection,
-    UserUpdateModel,
-    UserWithImage,
     SortUserModel,
     SortValues,
+    UserCollection,
+    UserModel,
     UserOutputModel,
-)
-from database import get_mongo_database
-from dao.grid_fs_mongo_dao import MongoImagesDAO
-import asyncio
-from exceptions import (
-    UserNotFoundException,
-    ValidateBsonID,
-    IncorrectVoteValueException,
+    UserUpdateModel,
+    UserWithImage,
 )
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -66,6 +67,8 @@ async def create_user_with_image(
     response_model=UserCollection,
     response_model_by_alias=False,
 )
+# from fastapi_cache.decorator import cache
+# @cache(expire=60)
 async def get_users(
     database: MongoImagesDAO = Depends(get_mongo_database), limit: int = 100
 ):

@@ -14,9 +14,9 @@ class DataWriter:
         col_number = 1
         for item in data[:limit]:
             for value, index in zip(item.values(), range(len(self.columns))):
-                if isinstance(value,dict):
-                    for _value,_index in zip(value.values(),range(len(value.keys()))):
-                        self.sheet.write(_index+1,index,str(_value))
+                if isinstance(value, dict):
+                    for _value, _index in zip(value.values(), range(len(value.keys()))):
+                        self.sheet.write(_index + 1, index, str(_value))
                 else:
                     self.sheet.write(col_number, index, str(value))
             col_number += 1

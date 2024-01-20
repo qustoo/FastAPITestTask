@@ -37,8 +37,8 @@ class MongoDAO(NoSQLDAO):
                 }
             )
         ]
-    
-     # INC/DEC VOTE VALUE
+
+    # INC/DEC VOTE VALUE
 
     async def check_vote_value(self, id):
         vote_valud_dict: dict[str, str] = await self.object_collection.find_one(
@@ -54,10 +54,3 @@ class MongoDAO(NoSQLDAO):
             {"_id": id}, {"$inc": {"vote_value": value}}
         )
         return True
-    
-    
-    # CLEAR COLLECTION
-    async def clear_database(self):
-        await self._image_coll.delete_many({})
-        await self._fs_files.delete_many({})
-        await self.object_collection.delete_many({})

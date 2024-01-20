@@ -8,6 +8,12 @@ class MongoImagesDAO(MongoDAO):
         self._fs_files = fs_files  # fs.files
         self._object_fs = object_fs  # gridfs
 
+    # CLEAR COLLECTION WITH IMAGES
+    async def clear_database(self):
+        await self._image_coll.delete_many({})
+        await self._fs_files.delete_many({})
+        await self.object_collection.delete_many({})
+
     # GRIDFS, UPLOAD/DOWNLOAD IMAGES
 
     async def upload_image(self, file_data: dict, data: bytes) -> dict:
