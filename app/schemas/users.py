@@ -4,8 +4,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field, model_validator
 from pydantic.functional_validators import BeforeValidator
-from schemas.images import ImageModel
 from typing_extensions import Annotated
+
+from app.schemas.images import ImageModel
 
 from .sorts import SortValues
 

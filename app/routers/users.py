@@ -2,13 +2,15 @@ import asyncio
 from typing import Optional
 
 from bson import ObjectId
-from dao.grid_fs_mongo_dao import MongoImagesDAO
-from database import get_mongo_database
-from dependecies import validate_id
-from exceptions import IncorrectVoteValueException, UserNotFoundException
 from fastapi import APIRouter, Body, Depends, File, UploadFile, status
 from fastapi.responses import JSONResponse
-from schemas import (
+from fastapi_cache.decorator import cache
+
+from app.dao.grid_fs_mongo_dao import MongoImagesDAO
+from app.database import get_mongo_database
+from app.dependecies import validate_id
+from app.exceptions import IncorrectVoteValueException, UserNotFoundException
+from app.schemas import (
     SortUserModel,
     SortValues,
     UserCollection,
@@ -33,6 +35,7 @@ async def clear_database(database: MongoImagesDAO = Depends(get_mongo_database))
     response_model=UserCollection,
     response_description="Filter users by name/surname",
 )
+@cache(expire=3600)
 async def filter_users(
     name: Optional[str] = "",
     surname: Optional[str] = "",
@@ -66,8 +69,7 @@ async def create_user_with_image(
     response_model=UserCollection,
     response_model_by_alias=False,
 )
-# from fastapi_cache.decorator import cache
-# @cache(expire=60)
+@cache(expire=3600)
 async def get_users(
     database: MongoImagesDAO = Depends(get_mongo_database), limit: int = 100
 ):
@@ -174,6 +176,7 @@ async def vote_value(user_id: str, database: MongoImagesDAO, value: int):
     response_model=UserCollection,
     response_description="Sort users by ASC/DESC parameters",
 )
+@cache(expire=3600)
 async def sort_users(
     sorted_info: SortUserModel,
     database: MongoImagesDAO = Depends(get_mongo_database),
