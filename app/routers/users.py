@@ -1,14 +1,12 @@
 import asyncio
 from typing import Optional
 
+from bson import ObjectId
 from dao.grid_fs_mongo_dao import MongoImagesDAO
 from database import get_mongo_database
-from exceptions import (
-    IncorrectVoteValueException,
-    UserNotFoundException,
-    ValidateBsonID,
-)
-from fastapi import APIRouter, Body, Depends, File, Path, UploadFile, status
+from dependecies import validate_id
+from exceptions import IncorrectVoteValueException, UserNotFoundException
+from fastapi import APIRouter, Body, Depends, File, UploadFile, status
 from fastapi.responses import JSONResponse
 from schemas import (
     SortUserModel,
@@ -16,6 +14,7 @@ from schemas import (
     UserCollection,
     UserModel,
     UserOutputModel,
+    UserPartialUpdateModel,
     UserUpdateModel,
     UserWithImage,
 )
@@ -82,11 +81,10 @@ async def get_users(
     response_model_by_alias=False,
 )
 async def show_user(
-    database: MongoImagesDAO = Depends(get_mongo_database), user_id: str = Path(...)
+    database: MongoImagesDAO = Depends(get_mongo_database),
+    user_id: ObjectId = Depends(validate_id),
 ):
-    user_id = ValidateBsonID(user_id)
-    user = await database.show_user_by_id(user_id)
-    if user:
+    if user := await database.show_user_by_id(user_id):
         return user
     raise UserNotFoundException()
 
@@ -99,25 +97,41 @@ async def show_user(
 )
 async def update_user(
     user: UserUpdateModel,
-    user_id: str = Path(...),
+    user_id: ObjectId = Depends(validate_id),
     database: MongoImagesDAO = Depends(get_mongo_database),
 ):
-    user_id = ValidateBsonID(user_id)
-    new_user = {k: v for k, v in user.model_dump().items() if k is not None}
-    update_user = await database.update_user(user_id, new_user)
-    if update_user:
+    new_user_data = {k: v for k, v in user.model_dump(exclude_none=False).items()}
+    if update_user := await database.update_user(user_id, new_user_data):
         return update_user
     raise UserNotFoundException()
 
 
+@router.patch(
+    "/{user_id}",
+    response_description="Partial update user",
+    response_model=UserOutputModel,
+    response_model_by_alias=False,
+)
+async def partial_update_user(
+    partial_user: UserPartialUpdateModel,
+    user_id: ObjectId = Depends(validate_id),
+    database: MongoImagesDAO = Depends(get_mongo_database),
+):
+    new_user_data = {
+        k: v for k, v in partial_user.model_dump(exclude_none=True).items()
+    }
+    if update_user := await database.update_user(user_id, new_user_data):
+        return update_user
+    raise UserNotFoundException
+
+
 @router.delete("/{user_id}", response_description="Delete user")
 async def delete_user(
-    database: MongoImagesDAO = Depends(get_mongo_database), user_id: str = Path(...)
+    database: MongoImagesDAO = Depends(get_mongo_database),
+    user_id: ObjectId = Depends(validate_id),
 ):
-    user_id = ValidateBsonID(user_id)
-    delete_user = await database.delete_user(user_id)
-    if delete_user:
-        return JSONResponse(content=f"User with id '{user_id}' deleted")
+    if delete_user := await database.delete_user(user_id):
+        return JSONResponse(content=f"User with id '{delete_user.inserted_id}' deleted")
     raise UserNotFoundException()
 
 
@@ -129,7 +143,7 @@ async def delete_user(
 )
 async def inc_vote_value(
     database: MongoImagesDAO = Depends(get_mongo_database),
-    user_id: str = Path(...),
+    user_id: ObjectId = Depends(validate_id),
 ):
     return await vote_value(user_id, database, 1)
 
@@ -141,13 +155,13 @@ async def inc_vote_value(
     response_description="Decrement user vote value ",
 )
 async def dec_vote_value(
-    database: MongoImagesDAO = Depends(get_mongo_database), user_id: str = Path(...)
+    database: MongoImagesDAO = Depends(get_mongo_database),
+    user_id: ObjectId = Depends(validate_id),
 ):
     return await vote_value(user_id, database, -1)
 
 
 async def vote_value(user_id: str, database: MongoImagesDAO, value: int):
-    user_id = ValidateBsonID(user_id)
     async with LOCK:
         if not await database.vote_value(user_id, value):
             raise IncorrectVoteValueException()
