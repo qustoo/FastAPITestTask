@@ -15,8 +15,10 @@ class DataWriter:
         for item in data[:limit]:
             for value, index in zip(item.values(), range(len(self.columns))):
                 if isinstance(value, dict):
-                    for _value, _index in zip(value.values(), range(len(value.keys()))):
-                        self.sheet.write(_index + 1, index, str(_value))
+                    for _value in value.values():
+                        self.sheet.write(col_number, index, str(_value))
+                        col_number += 1
+                    col_number -= 1
                 else:
                     self.sheet.write(col_number, index, str(value))
             col_number += 1
@@ -27,4 +29,4 @@ class DataWriter:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.book.close()
-        return False  # Ловим все ошибки
+        return False  # Выбрасываем любые ошибки что поймали
