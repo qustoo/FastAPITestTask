@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 
 from app.dao import MongoImagesDAO
 from app.database import get_mongo_database
+from app.logger import logger
 from app.utils import DataWriter
 
 router = APIRouter(prefix="/export", tags=["Exports"])
@@ -20,5 +21,6 @@ async def export_data(
             dw.write_columns()
             dw.write_values(data)
     except Exception as err:
+        logger.error("Cannot export data to xsls format", exc_info=str(err))
         return HTTPException(status_code=400, detail=str(err))
     return JSONResponse("data.xsls was created")
