@@ -20,7 +20,7 @@ class MongoImagesDAO(MongoDAO):
         fs_chunks_files_id = await self._object_fs.upload_from_stream(
             file_data.filename, data
         )  # кладет в fs.chunks
-        images_coll_id = await self._image_coll.insert_one(
+        await self._image_coll.insert_one(
             {"filename": file_data.filename, "fs_chunks_files_id": fs_chunks_files_id}
         )
         # Достаем из fs.files метаданные в словаре
