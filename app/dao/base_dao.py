@@ -41,10 +41,8 @@ class NoSQLDAO(NoSQLInterface):
     async def list_users(self, limit):
         return await self.object_collection.find({}).to_list(limit)
 
-    async def update_user(self, id, updated_user):
-        await self.object_collection.find_one_and_update(
-            {"_id": id}, {"$set": updated_user}
-        )
+    async def update_user(self, id, data_values):
+        await self.object_collection.update_one({"_id": id}, {"$set": data_values})
         return await self.show_user_by_id(id)
 
     async def delete_user(self, id):
