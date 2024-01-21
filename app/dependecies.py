@@ -1,8 +1,9 @@
 from bson import ObjectId
 from bson.errors import InvalidId
-from exceptions import InvalidBsonIDException
 from fastapi import Path
 from typing_extensions import Annotated
+
+from app.exceptions import InvalidBsonIDException
 
 
 async def validate_id(user_id: Annotated[str, Path()]):

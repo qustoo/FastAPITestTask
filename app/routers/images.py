@@ -1,11 +1,12 @@
 from bson import ObjectId
-from dao.grid_fs_mongo_dao import MongoImagesDAO
-from database import get_mongo_database
-from dependecies import validate_file_id
-from exceptions import FileNotFoundException
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from schemas.images import ImageModel
+
+from app.dao.grid_fs_mongo_dao import MongoImagesDAO
+from app.database import get_mongo_database
+from app.dependecies import validate_file_id
+from app.exceptions import FileNotFoundException
+from app.schemas.images import ImageModel
 
 router = APIRouter(prefix="/files", tags=["Images"])
 

@@ -1,4 +1,4 @@
-from dao.base_dao import NoSQLDAO
+from app.dao.base_dao import NoSQLDAO
 
 
 class MongoDAO(NoSQLDAO):

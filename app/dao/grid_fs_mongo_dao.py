@@ -1,4 +1,4 @@
-from dao.mongo_dao import MongoDAO
+from app.dao.mongo_dao import MongoDAO
 
 
 class MongoImagesDAO(MongoDAO):
