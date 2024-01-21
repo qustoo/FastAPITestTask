@@ -43,11 +43,19 @@ class UserCollection(BaseModel):
 
 
 class UserUpdateModel(BaseModel):
-    name: Optional[str] = None
-    surname: Optional[str] = None
-    age: Optional[int] = None
-    birthdate: Optional[datetime.datetime] = None
-    vote_value: Optional[int] = None
+    name: str = Field(..., min_length=2)
+    surname: str = Field(..., min_length=3)
+    age: int = Field(default=18, ge=18)
+    birthdate: datetime.datetime = Field(...)
+    vote_value: int = Field(default=0, ge=0, le=10)
+
+
+class UserPartialUpdateModel(BaseModel):
+    name: Optional[str] = Field(None, min_length=2)
+    surname: Optional[str] = Field(None, min_length=3)
+    age: Optional[int] = Field(None, ge=18)
+    birthdate: Optional[datetime.datetime] = Field(None)
+    vote_value: Optional[int] = Field(None, ge=0, le=10)
 
 
 class SortUserModel(BaseModel):
