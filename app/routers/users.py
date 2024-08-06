@@ -6,11 +6,11 @@ from fastapi import APIRouter, Body, Depends, File, UploadFile, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 
-from app.dao.grid_fs_mongo_dao import MongoImagesDAO
-from app.database import get_mongo_database
-from app.dependecies import validate_id
-from app.exceptions import IncorrectVoteValueException, UserNotFoundException
-from app.schemas import (
+from FastAPITestTask.app.dao.grid_fs_mongo_dao import MongoImagesDAO
+from FastAPITestTask.app.database import get_mongo_database
+from FastAPITestTask.app.dependecies import validate_id
+from FastAPITestTask.app.exceptions import IncorrectVoteValueException, UserNotFoundException
+from FastAPITestTask.app.schemas import (
     SortUserModel,
     SortValues,
     UserCollection,
@@ -173,10 +173,9 @@ async def vote_value(user_id: str, database: MongoImagesDAO, value: int):
 
 @router.post(
     "/sort",
-    response_model=UserCollection,
+   response_model=UserCollection,
     response_description="Sort users by ASC/DESC parameters",
 )
-@cache(expire=3600)
 async def sort_users(
     sorted_info: SortUserModel,
     database: MongoImagesDAO = Depends(get_mongo_database),

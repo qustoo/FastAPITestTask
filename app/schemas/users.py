@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, model_validator
 from pydantic.functional_validators import BeforeValidator
 from typing_extensions import Annotated
 
-from app.schemas.images import ImageModel
+from FastAPITestTask.app.schemas.images import ImageModel
 
 from .sorts import SortValues
 

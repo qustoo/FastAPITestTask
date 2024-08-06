@@ -1,7 +1,7 @@
 import pytest
 
 
-async def test_get_all_users(async_client):
+async def test_get_all_users(async_client,create_cache):
     response = await async_client.get("/users/")
     json_response = response.json()
     assert len(json_response["users"])
@@ -23,7 +23,7 @@ async def test_get_user_by_id(user_id, name, surname, age, birthdate, async_clie
 
 
 @pytest.mark.parametrize("name, surname", [("", "")])
-async def test_empty_filter_users_by_name_surname(name, surname, async_client):
+async def test_empty_filter_users_by_name_surname(name, surname, async_client,create_cache):
     total_users = await async_client.get("/users/")
     total_len = len(total_users.json()["users"])
     filter_users = await async_client.get("/users/filter")

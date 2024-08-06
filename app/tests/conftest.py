@@ -1,9 +1,11 @@
 import asyncio
-
+from app.config import settings
 import pytest
 from httpx import AsyncClient
 from main import app as fastapi_app
-
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
 
 @pytest.fixture(scope="function", autouse=True)
 async def async_client():
@@ -19,3 +21,10 @@ def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
+
+@pytest.fixture(scope="session")
+async def create_cache():
+    redis = aioredis.from_url(
+        f"redis://{settings.REDIS_HOST:}", encoding="utf-8", decode_responses=True
+    )
+    FastAPICache.init(RedisBackend(redis), prefix="test_task_cache")

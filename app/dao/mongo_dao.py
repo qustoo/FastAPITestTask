@@ -1,4 +1,4 @@
-from app.dao.base_dao import NoSQLDAO
+from FastAPITestTask.app.dao.base_dao import NoSQLDAO
 
 
 class MongoDAO(NoSQLDAO):

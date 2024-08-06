@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 
-from app.dao import MongoImagesDAO
-from app.database import get_mongo_database
-from app.logger import logger
-from app.utils import DataWriter
+from FastAPITestTask.app.dao import MongoImagesDAO
+from FastAPITestTask.app.database import get_mongo_database
+from FastAPITestTask.app.logger import logger
+from FastAPITestTask.app.utils import DataWriter
 
 router = APIRouter(prefix="/export", tags=["Exports"])
 

@@ -2,8 +2,8 @@ import asyncio
 
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 
-from app.config import settings
-from app.dao import MongoImagesDAO
+from FastAPITestTask.app.config import settings
+from FastAPITestTask.app.dao import MongoImagesDAO
 
 if settings.DB_TYPE == "LOCAL":
     DATABASE_URL = settings.LOCAL_DATABASE_URL

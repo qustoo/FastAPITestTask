@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pythonjsonlogger import jsonlogger
 
-from app.config import settings
+from FastAPITestTask.app.config import settings
 
 logger = logging.getLogger()
 

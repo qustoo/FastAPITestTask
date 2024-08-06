@@ -1,4 +1,4 @@
-from app.dao.mongo_dao import MongoDAO
+from FastAPITestTask.app.dao.mongo_dao import MongoDAO
 
 
 class MongoImagesDAO(MongoDAO):
